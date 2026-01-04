@@ -68,7 +68,6 @@ CLASSIFYING-CONCILIATION-PROFILE/
 ├─ Notebooks/
 │  ├─ XGBoost/
 │  │  ├─ XGBoost.ipynb
-│  │  ├─ XGBoost-V2.ipynb
 │  │  └─ xgb_classification_model.pkl
 │  ├─ Random-Forest/
 │  │  ├─ Random-Forest.ipynb
