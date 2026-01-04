@@ -1,34 +1,39 @@
 # Conciliation
-Article reproducibility Classification of the Conciliation Profile in Initial Petitions in the Brazilian Judiciary
-
-# CLASSIFICANDO-PERFIL-DE-CONCILIAÇÃO
-
-Este repositório organiza um pipeline para **classificar o perfil de conciliação** (ex.: processos do Anonymous), combinando:
-- **pré-processamento** e geração de features (regex / atributos tabulares / features via LLM)
-- **embeddings** (ex.: Gemini/SBERT) com checkpoint parcial
-- **treinamento e avaliação** com modelos clássicos (XGBoost / RandomForest / LightGBM / CatBoost)
-- uma **versão de teste em produção** (app + Docker) para servir o modelo
-
-> ⚠️ **Importante (LGPD / dados sensíveis):** este repositório foi estruturado para **não versionar dados reais** (CSV/JSON), embeddings e artefatos pesados/derivados (PKL/NPY/checkpoints). A documentação abaixo deixa claro o que fica **local** vs o que vai para o **GitHub**.
+**Article reproducibility – Classification of the Conciliation Profile in Initial Petitions in the Brazilian Judiciary**
 
 ---
 
-## Estrutura do repositório (visão local)
+## CLASSIFYING-CONCILIATION-PROFILE
 
-Abaixo está uma visão **do ambiente local**, com dados e artefatos.  
-Ela serve como referência para organização.
+This repository organizes a pipeline to **classify the conciliation profile** (e.g., cases from *Anonymous*), combining:
 
-Estrutura (resumo):
+- **Preprocessing** and feature generation (regex / tabular attributes / LLM-based features)
+- **Embeddings** (e.g., Gemini / SBERT) with partial checkpointing
+- **Training and evaluation** using classical models (XGBoost / RandomForest / LightGBM / CatBoost)
+- A **production test version** (app + Docker) to serve the trained model
+
+> ⚠️ **Important (LGPD / sensitive data):**  
+> This repository is structured to **avoid versioning real data** (CSV/JSON), embeddings, and heavy/derived artifacts (PKL/NPY/checkpoints).  
+> The documentation below clearly states what remains **local** versus what is pushed to **GitHub**.
+
+---
+
+## Repository structure (local view)
+
+Below is a view of the **local environment**, including data and artifacts.  
+It is provided **for organizational reference only**.
+
+### Structure (summary)
 
 ```text
-CLASSIFICANDO-PERFIL-DE-CONCILIAÇÃO/
+CLASSIFYING-CONCILIATION-PROFILE/
 ├─ Abordagem-com-LLM/
 │  ├─ Dados/
 │  │  └─ dados_processos_Anonymous_14052025.json
 │  ├─ Conciliacao.ipynb
 │  ├─ dados_processos_completo.csv
 │  └─ embeddings_Anonymous.npy
-├─ Análise-Estatística-do-Corpus/
+├─ Analise-Estatistica-do-Corpus/
 │  └─ Statistical-Corpus-Analysis.ipynb
 ├─ Conciliacao/
 │  ├─ dados/
@@ -37,60 +42,60 @@ CLASSIFICANDO-PERFIL-DE-CONCILIAÇÃO/
 │  │  │  ├─ dados_processos_Anonymous_03072025_V2.csv
 │  │  │  ├─ dados_processos_Anonymous_03072025_V3.csv
 │  │  │  ├─ dados_processos_Anonymous_03072025.json
-│  │  │  ├─ dados_processos_Anonymous_03072025_V1_enriquecidos.json
-│  │  │  └─ frequencia_tokens_artificiais.txt
+│  │  │  ├─ dados_processos_Anonymous_03072025_V1_enriched.json
+│  │  │  └─ artificial_token_frequency.txt
 │  │  └─ Anonymous_14052025/
 │  │     ├─ dados_processos_Anonymous_14052025_V1.csv
 │  │     ├─ dados_processos_Anonymous_14052025_V2.csv
 │  │     ├─ dados_processos_Anonymous_14052025_V3.csv
 │  │     ├─ dados_processos_Anonymous_14052025.json
-│  │     ├─ dados_processos_Anonymous_14052025_V1_enriquecidos.json
-│  │     └─ frequencia_tokens_artificiais.txt
+│  │     ├─ dados_processos_Anonymous_14052025_V1_enriched.json
+│  │     └─ artificial_token_frequency.txt
 │  └─ Embeddings/
-│     ├─ checkpoint_parcial.npy
+│     ├─ partial_checkpoint.npy
 │     ├─ checkpoint_partial_03072025.npy
-│     ├─ dados_processos_Anonymous_14052025_rejeitados.json
-│     ├─ dados_processos_Anonymous_14052025_V1_enriquecidos_Embeddings.json
-│     ├─ dados_processos_Anonymous_14052025_V1_enriquecidos_Embeddings.npy
+│     ├─ dados_processos_Anonymous_14052025_rejected.json
+│     ├─ dados_processos_Anonymous_14052025_V1_enriched_Embeddings.json
+│     ├─ dados_processos_Anonymous_14052025_V1_enriched_Embeddings.npy
 │     └─ ...
 ├─ Scripts/
 │  ├─ gerar_embeddings_gemini.py
 │  ├─ gerar_features_gemini.py
 │  ├─ gerar_features_sentence_transformers.py
 │  ├─ classificar_com_gemini.py
-│  ├─ checkpoint_parcial.json
+│  ├─ partial_checkpoint.json
 │  └─ br-tjgo-cld-02-09b1b22e65b3.json
 ├─ Notebooks/
 │  ├─ XGBoost/
 │  │  ├─ XGBoost.ipynb
 │  │  ├─ XGBoost-V2.ipynb
-│  │  └─ modelo_classificacao_xgb.pkl
+│  │  └─ xgb_classification_model.pkl
 │  ├─ Random-Forest/
 │  │  ├─ Random-Forest.ipynb
-│  │  └─ modelo_rf_classificacao.pkl
+│  │  └─ rf_classification_model.pkl
 │  ├─ LightGBM/
 │  │  ├─ LightGBM.ipynb
-│  │  └─ modelo_lightgbm_v1.pkl
+│  │  └─ lightgbm_model_v1.pkl
 │  ├─ CatBoost/
 │  │  ├─ CatBoost.ipynb
 │  │  ├─ CatBoost.pkl
-│  │  └─ catboost_info/ (logs/artefatos)
-│  ├─ pre-processamento.ipynb
-│  └─ analisar_regex.ipynb
-└─ XGBoost-Producao-Teste/
+│  │  └─ catboost_info/ (logs/artifacts)
+│  ├─ pre-processing.ipynb
+│  └─ regex_analysis.ipynb
+└─ XGBoost-Production-Test/
    ├─ App/
    │  ├─ app.py
-   │  ├─ modelo_xgboost.pkl
-   │  ├─ modelo_randomforest.pkl
+   │  ├─ xgboost_model.pkl
+   │  ├─ randomforest_model.pkl
    │  ├─ templates/index.html
    │  └─ static/Logo.png
    ├─ Dados/
-   │  ├─ Embeddings/vetores_texto.npy
-   │  ├─ dados_processos_Anonymous_limpos.json
-   │  ├─ dados_processos_Anonymous_features.json
+   │  ├─ Embeddings/text_vectors.npy
+   │  ├─ cleaned_Anonymous_processes.json
+   │  ├─ Anonymous_processes_features.json
    │  └─ dados_processos_Anonymous_14052025.csv
    ├─ Notebooks/
-   │  ├─ pre-processamento-dados.ipynb
+   │  ├─ pre-processing-data.ipynb
    │  └─ xgboost.ipynb
    ├─ Dockerfile
    ├─ docker-compose.yml
@@ -99,90 +104,83 @@ CLASSIFICANDO-PERFIL-DE-CONCILIAÇÃO/
 
 ---
 
-## O que NÃO deve subir no GitHub (e por quê)
+## What should NOT be pushed to GitHub (and why)
 
-### 1) Dados brutos e derivados (LGPD / volume / reprodutibilidade)
-❌ **Não versionar:**
+### 1) Raw and derived data (LGPD / volume / reproducibility)
+❌ **Do not version:**
 - `**/Dados/**/*.csv`
 - `**/Dados/**/*.json`
 - `**/Conciliacao/dados/**`
-- `**/frequencia_tokens_artificiais.txt` (se contiver tokens derivados de dados reais)
+- `**/artificial_token_frequency.txt` (if derived from real data)
 
-✅ **Como lidar no GitHub:**
-- Suba **apenas a estrutura** (pastas vazias com `.gitkeep`) e/ou **um exemplo anonimizado** (ex.: `sample_dados.csv`).
+✅ **Recommended approach:**
+- Commit **only the folder structure** (empty folders with `.gitkeep`) and/or **an anonymized sample** (e.g., `sample_data.csv`).
 
 ---
 
-### 2) Embeddings e vetores (pesados + derivados)
-❌ **Não versionar:**
+### 2) Embeddings and vectors (heavy + derived)
+❌ **Do not version:**
 - `**/*.npy`
 - `**/*Embeddings*.json`
 - `**/*Embeddings*.npy`
 - `**/Embeddings/**`
 
-Motivo: são arquivos grandes, derivados do dado, e não agregam rastreabilidade no Git (além de custo de armazenamento).
+Reason: large files derived from data that do not add traceability in Git.
 
 ---
 
-### 3) Checkpoints e estados parciais (reentrância)
-❌ **Não versionar:**
-- `checkpoint_parcial.json`
-- `checkpoint_parcial.npy`
+### 3) Checkpoints and partial states
+❌ **Do not version:**
+- `partial_checkpoint.json`
+- `partial_checkpoint.npy`
 - `checkpoint_partial_*.npy`
-- quaisquer arquivos “checkpoint” criados para retomar execução
+- any checkpoint files created for execution resumption
 
-Motivo: são artefatos temporários, específicos da máquina/execução.
+Reason: temporary, machine- and execution-specific artifacts.
 
 ---
 
-### 4) Modelos treinados (PKL / binários)
-❌ **Não versionar (recomendado):**
+### 4) Trained models (PKL / binaries)
+❌ **Recommended not to version:**
 - `**/*.pkl`
 - `**/*.joblib`
 
-Motivo: binários podem ser grandes; podem mudar a cada treino; e às vezes são sensíveis (podem “memorizar” padrões).  
-✅ Alternativas:
-- publicar modelos em um **Model Registry** (ou na seção de releases)
-- versionar apenas o código + pipeline de treino e “como reproduzir”
-
-> Exceção: se for um repositório didático/pequeno e o modelo for leve e não sensível, você *pode* subir, mas o ideal é não.
+Alternatives:
+- publish models via a **Model Registry** or GitHub Releases
+- version only the training pipeline and instructions to reproduce
 
 ---
 
-### 5) Logs de treino / lixo de execução
-❌ **Não versionar:**
+### 5) Training logs / execution artifacts
+❌ **Do not version:**
 - `catboost_info/`
 - `events.out.tfevents*`
 - `tmp/`
-- `*.tsv` gerado por treino
+- training-generated `*.tsv`
 - `.ipynb_checkpoints/`
 - `__pycache__/`, `*.pyc`
 
 ---
 
-## Pastas que DEVEM existir (mesmo vazias)
+## Folders that SHOULD exist (even if empty)
 
-Para facilitar a reprodução por terceiros, mantenha a estrutura e crie as pastas abaixo no clone:
+To facilitate reproducibility, keep the following folders in the repository (use `.gitkeep`):
 
 ```text
 Conciliacao/dados/
 Conciliacao/Embeddings/
-XGBoost-Producao-Teste/Dados/
-XGBoost-Producao-Teste/Dados/Embeddings/
-docs/   (opcional, para prints)
+XGBoost-Production-Test/Dados/
+XGBoost-Production-Test/Dados/Embeddings/
+docs/   (optional, for figures/screenshots)
 ```
-
-Sugestão: crie um arquivo `.gitkeep` em cada pasta vazia.
 
 ---
 
-## Sugestão de `.gitignore` (cobre dados, embeddings, checkpoints, modelos e logs)
-
-> Se você já tem um `.gitignore`, compare com este e incorpore o que faltar.
+## Suggested `.gitignore`
 
 ```gitignore
 # =========================
-# DADOS (LGPD / não versionar)
+# DATA (LGPD / do not version)
 # =========================
 **/Dados/**/*.csv
 **/Dados/**/*.json
@@ -191,7 +189,7 @@ Sugestão: crie um arquivo `.gitkeep` em cada pasta vazia.
 **/dados/**/*.json
 
 # =========================
-# EMBEDDINGS / VETORES
+# EMBEDDINGS / VECTORS
 # =========================
 **/*.npy
 **/Embeddings/**
@@ -205,13 +203,13 @@ Sugestão: crie um arquivo `.gitkeep` em cada pasta vazia.
 **/checkpoint*.npy
 
 # =========================
-# MODELOS TREINADOS
+# TRAINED MODELS
 # =========================
 **/*.pkl
 **/*.joblib
 
 # =========================
-# LOGS / ARTEFATOS DE TREINO
+# LOGS / TRAINING ARTIFACTS
 # =========================
 **/catboost_info/
 **/events.out.tfevents*
@@ -230,19 +228,18 @@ __pycache__/
 
 ---
 
-## Como reproduzir 
+## How to reproduce
 
-1) **Coloque os dados localmente** nas pastas `Dados/` (ou em `Conciliacao/dados/Anonymous_*/`).  
-2) Rode scripts em `Scripts/` para:
-   - gerar features (`gerar_features_*.py`)
-   - gerar embeddings (`gerar_embeddings_*.py`)
-3) Use os notebooks em `Notebooks/` para treinar/avaliar (XGBoost/RF/LGBM/CatBoost).
-4) Se quiser servir, use `XGBoost-Producao-Teste/` (Docker + app).
-
----
-
-Link dos dados usados no projeto: https://huggingface.co/datasets/Anonymous/
+1. **Place the data locally** in `Dados/` or `Conciliacao/dados/Anonymous_*/`.
+2. Run scripts in `Scripts/` to:
+   - generate features (`gerar_features_*.py`)
+   - generate embeddings (`gerar_embeddings_*.py`)
+3. Use notebooks in `Notebooks/` to train and evaluate models (XGBoost / RF / LGBM / CatBoost).
+4. To serve the model, use `XGBoost-Production-Test/` (Docker + app).
 
 ---
 
+## Dataset
 
+Dataset used in this project:  
+https://huggingface.co/datasets/Anonymous/
