@@ -1,0 +1,40 @@
+@'
+# DADOS (não versionar)
+Dados/
+dados/
+Conciliacao/dados/
+
+# ARQUIVOS DE DADOS (qualquer lugar dentro do projeto)
+*.csv
+*.json
+*.npy
+*.pkl
+*.joblib
+
+# EMBEDDINGS / CHECKPOINTS
+Embeddings/
+checkpoint*.json
+checkpoint*.npy
+
+# LOGS / TREINO
+catboost_info/
+events.out.tfevents*
+tmp/
+*.tsv
+
+# JUPYTER / PYTHON
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# SEGREDOS
+br-*.json
+
+# EXCEÇÕES (quero versionar)
+!requirements.txt
+!README.md
+!Dockerfile
+!docker-compose.yml
+'@ | Set-Content "DIACDE\Classificando-Perfil-de-Conciliação\.gitignore" -Encoding utf8
